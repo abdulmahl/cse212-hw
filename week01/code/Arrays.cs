@@ -6,6 +6,17 @@ public static class Arrays
     /// integer greater than 0.
     /// </summary>
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
+    /// 
+    public static void Run()
+    {
+        var multiples = MultiplesOf(7, 5);
+        Console.WriteLine("<double[]>{" + string.Join(", ", multiples) + "}");
+
+        var data = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        int amount = 3; // Rotate by 3 positions
+        RotateListRight(data, amount);
+        Console.WriteLine("Rotated List: {" + string.Join(", ", data) + "}");
+    }
     public static double[] MultiplesOf(double number, int length)
     {
         // TODO Problem 1 Start
@@ -13,7 +24,16 @@ public static class Arrays
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return []; // replace this return statement with your own
+        //Initialize an empty array of number multiple doubles.
+        var multiples = new double[length];
+        //Loop through and calculate each multiple.
+        for (var i = 0; i < length; i++)
+        {
+            //Append each multiple numbe to the multiples array. 
+            multiples[i] = number * (i + 1);
+        }
+        //Return new multiples array...
+        return multiples;
     }
 
     /// <summary>
@@ -29,5 +49,17 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+
+        // Ensure amount is within the range of the list's length
+        amount %= data.Count;
+
+        // Get the last 'amount' elements
+        List<int> rotatedPart = data.GetRange(data.Count - amount, amount);
+
+        // Remove these elements from the original list
+        data.RemoveRange(data.Count - amount, amount);
+
+        // Insert the removed elements at the beginning of the list
+        data.InsertRange(0, rotatedPart);
     }
 }
