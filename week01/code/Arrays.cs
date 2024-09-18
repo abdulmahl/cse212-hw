@@ -15,7 +15,7 @@ public static class Arrays
         var data = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         int amount = 3; // Rotate by 3 positions
         RotateListRight(data, amount);
-        Console.WriteLine("Rotated List: {" + string.Join(", ", data) + "}");
+        Console.WriteLine("List<int>{" + string.Join(", ", data) + "}");
     }
     public static double[] MultiplesOf(double number, int length)
     {
