@@ -165,7 +165,7 @@ public class TakingTurnsQueueTests
         {
             Assert.Fail(
                  string.Format("Unexpected exception of type {0} caught: {1}",
-                                e.GetType(), e.Message)
+                        e.GetType(), e.Message)
             );
         }
     }
