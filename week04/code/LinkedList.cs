@@ -33,6 +33,22 @@ public class LinkedList : IEnumerable<int>
     public void InsertTail(int value)
     {
         // TODO Problem 1
+        // Create new node...
+        Node newTail = new(value);
+
+        //Check if list is not empty if so, point the _tail & the _head to the new node...
+        if (_tail is null)
+        {
+            _head = newTail;
+            _tail = newTail;
+        }
+        //Search the list and set the newTail to _tail.
+        else
+        {
+            newTail.Prev = _tail;
+            _tail.Next = newTail;
+            _tail = newTail;
+        }
     }
 
 
@@ -65,6 +81,29 @@ public class LinkedList : IEnumerable<int>
     public void RemoveTail()
     {
         // TODO Problem 2
+        //If tail is null return...
+        if (_tail is null)
+        {
+            return;
+        }
+
+        if (_tail == _head) //Set tail & head to null...
+        {
+            _tail = null;
+            _head = null;
+        }
+
+        else
+        {
+            // Move the tail to the previous node
+            _tail = _tail.Prev;
+
+            // If _tail is not null, set its Next to null
+            if (_tail is not null)
+            {
+                _tail.Next = null;
+            }
+        }
     }
 
     /// <summary>
@@ -75,7 +114,8 @@ public class LinkedList : IEnumerable<int>
         // Search for the node that matches 'value' by starting at the 
         // head of the list.
         Node? curr = _head;
-        while (curr is not null)
+
+        while (curr is not null) //Search the list for the value to insert after.
         {
             if (curr.Data == value)
             {
@@ -108,16 +148,64 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void Remove(int value)
     {
-        // TODO Problem 3
+        //Initialize new node...
+        Node? curr = _head;
+
+        // Search the list to find the node with the matching value
+        while (curr is not null)
+        {
+            if (curr.Data == value)
+            {
+                // If the node is the only one in the list
+                if (curr == _head && curr == _tail)
+                {
+                    _head = null;
+                    _tail = null;
+                }
+                // If the node is the head
+                else if (curr == _head)
+                {
+                    RemoveHead();
+                }
+                // If the node is the tail
+                else if (curr == _tail)
+                {
+                    RemoveTail();
+                }
+                // If the node is in the middle
+                else
+                {
+                    curr.Prev!.Next = curr.Next; // Link the previous node to the next node
+                    curr.Next!.Prev = curr.Prev; // Link the next node to the previous node
+                }
+
+                return; // Node is removed, so we can exit
+            }
+
+            curr = curr.Next; // Continue searching the list
+        }
     }
+
 
     /// <summary>
     /// Search for all instances of 'oldValue' and replace the value to 'newValue'.
     /// </summary>
     public void Replace(int oldValue, int newValue)
     {
-        // TODO Problem 4
+        Node? curr = _head;
+
+        // Search the list
+        while (curr is not null)
+        {
+            if (curr.Data == oldValue)
+            {
+                curr.Data = newValue; // Replace the value
+            }
+
+            curr = curr.Next; // Move to the next node
+        }
     }
+
 
     /// <summary>
     /// Yields all values in the linked list
@@ -146,9 +234,14 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public IEnumerable Reverse()
     {
-        // TODO Problem 5
-        yield return 0; // replace this line with the correct yield return statement(s)
+        var curr = _tail; // Start from the tail for reverse iteration
+        while (curr is not null)
+        {
+            yield return curr.Data; // Provide each item
+            curr = curr.Prev; // Go backward in the linked list
+        }
     }
+
 
     public override string ToString()
     {
@@ -168,8 +261,10 @@ public class LinkedList : IEnumerable<int>
     }
 }
 
-public static class IntArrayExtensionMethods {
-    public static string AsString(this IEnumerable array) {
+public static class IntArrayExtensionMethods
+{
+    public static string AsString(this IEnumerable array)
+    {
         return "<IEnumerable>{" + string.Join(", ", array.Cast<int>()) + "}";
     }
 }

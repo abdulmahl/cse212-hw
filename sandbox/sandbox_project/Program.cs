@@ -5,43 +5,47 @@ public class Program
 {
     static void Main(string[] args)
     {
-        Dictionary<string, int> dictionary = new();
-        dictionary.Add("Book", 23);
-        dictionary.Add("Bag", 13);
-        dictionary.Add("Bike", 24);
-        dictionary.Add("Glasses", 53);
-        dictionary.Add("Stool", 43);
+        LinkedList<string> LLlist = new(); // Create new node.
+        LLlist.AddLast("A"); // Current node...
+        LLlist.AddLast("B");
+        LLlist.AddLast("C");
+        LLlist.AddLast("D");
 
-        Console.WriteLine("Dictionary items: ");
-        foreach (var item in dictionary)
+        //Insert X at the head...
+        var currentHeadNodeWhichIsA = LLlist.Find("A");
+
+        if (currentHeadNodeWhichIsA != null)
         {
-            Console.WriteLine(item);
+            LLlist.AddBefore(currentHeadNodeWhichIsA, "X");
         }
 
-        Hashtable htable = new();
-        htable.Add(2, "Bread");
-        htable.Add(44, "Eggs");
-        htable.Add(66, "Milk");
-        htable.Add(12, "Butter");
-        htable.Add(33, "Oil");
+        //Insert Y between C & B...
+        LinkedListNode<string> nodeB = LLlist.Find("B");
 
-        Console.WriteLine("Hashtable contents: ");
-        foreach (var content in htable)
+        //check if B exists...
+        if (nodeB != null)
         {
-            Console.WriteLine(content);
+            LLlist.AddAfter(nodeB, "Y");
         }
 
-        string[] arr = { "Pen", "Book", "Tape", "Tape" };
+        LLlist.RemoveLast();
+        LLlist.Remove(nodeB);
 
-        var hset = new HashSet<string>(arr);
-        hset.Add("Greens");
-        hset.Add("Beans");
-        hset.Add("Basil");
 
-        Console.WriteLine("Set output: ");
-        foreach (var set in hset)
+        // LLlist.RemoveFirst();
+
+        // LinkedListNode<int> node45 = LLlist.Find(45);
+        // LinkedListNode<int> current = LLlist.Find(66);
+
+        int i = 0;
+        foreach (var item in LLlist)
         {
-            Console.WriteLine(set);
+            Console.WriteLine($"{i + 1}. {item}");
+            i++;
         }
+
+        // Console.WriteLine("Current Value: {0}", current.Value);
+        // Console.WriteLine($"Value After Current: {current.Next.Value}");
+        // Console.WriteLine($"Value Before Current: {current.Previous.Value}");
     }
 }
