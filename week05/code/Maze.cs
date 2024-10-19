@@ -4,6 +4,8 @@ public class Maze
 {
     public int Width { get; }
     public int Height { get; }
+    public int EndX { get; internal set; }
+    public int EndY { get; internal set; }
 
     public readonly int[] Data;
 
@@ -75,5 +77,10 @@ public class Maze
             return false;
         // Otherwise, we are good
         return true;
+    }
+
+    internal bool IsOpen(int v, int y)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -15,7 +15,9 @@ public static class Recursion
     public static int SumSquaresRecursive(int n)
     {
         // TODO Start Problem 1
-        return 0;
+        if (n <= 0)
+            return 0; // Base case
+        return (n * n) + SumSquaresRecursive(n - 1); // Recursive step    
     }
 
     /// <summary>
@@ -40,6 +42,17 @@ public static class Recursion
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
         // TODO Start Problem 2
+        if (word.Length == size)
+        {
+            results.Add(word); // Base case
+            return;
+        }
+
+        for (int i = 0; i < letters.Length; i++)
+        {
+            // Generate permutations by recursively adding letters
+            PermutationsChoose(results, letters.Substring(0, i) + letters.Substring(i + 1), size, word + letters[i]);
+        }
     }
 
     /// <summary>
@@ -99,7 +112,22 @@ public static class Recursion
         // TODO Start Problem 3
 
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
+
+        // Base Cases
+        if (s == 0) return 0;
+        if (s == 1) return 1;
+        if (s == 2) return 2;
+        if (s == 3) return 4;
+
+        // Check memoized results
+        if (remember.ContainsKey(s))
+            return remember[s];
+
+        // Recursive step with memoization
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+        remember[s] = ways; // Store the result in the dictionary
         return ways;
     }
 
@@ -119,6 +147,18 @@ public static class Recursion
     public static void WildcardBinary(string pattern, List<string> results)
     {
         // TODO Start Problem 4
+        int wildcardIndex = pattern.IndexOf('*');
+
+        // Base case: No more wildcards
+        if (wildcardIndex == -1)
+        {
+            results.Add(pattern);
+            return;
+        }
+
+        // Recursive step: Replace '*' with '0' and '1'
+        WildcardBinary(pattern.Substring(0, wildcardIndex) + '0' + pattern.Substring(wildcardIndex + 1), results);
+        WildcardBinary(pattern.Substring(0, wildcardIndex) + '1' + pattern.Substring(wildcardIndex + 1), results);
     }
 
     /// <summary>
@@ -129,15 +169,34 @@ public static class Recursion
     {
         // If this is the first time running the function, then we need
         // to initialize the currPath list.
-        if (currPath == null) {
+        if (currPath == null)
+        {
             currPath = new List<ValueTuple<int, int>>();
         }
-        
+
         // currPath.Add((1,2)); // Use this syntax to add to the current path
 
         // TODO Start Problem 5
-        // ADD CODE HERE
+        if (currPath == null)
+        {
+            currPath = new List<ValueTuple<int, int>>();
+        }
 
+        // Base case: If reached the end
+        if (x == maze.EndX && y == maze.EndY)
+        {
+            results.Add(string.Join(" -> ", currPath.Select(p => $"({p.Item1},{p.Item2})")));
+            return;
+        }
+
+        // Add the current position to the path
+        currPath.Add((x, y));
+
+        // Recursive case: Try moving in all valid directions (check boundaries and walls)
+        if (maze.IsOpen(x + 1, y)) SolveMaze(results, maze, x + 1, y, new List<ValueTuple<int, int>>(currPath)); // Move right
+        if (maze.IsOpen(x - 1, y)) SolveMaze(results, maze, x - 1, y, new List<ValueTuple<int, int>>(currPath)); // Move left
+        if (maze.IsOpen(x, y + 1)) SolveMaze(results, maze, x, y + 1, new List<ValueTuple<int, int>>(currPath)); // Move down
+        if (maze.IsOpen(x, y - 1)) SolveMaze(results, maze, x, y - 1, new List<ValueTuple<int, int>>(currPath)); // Move up
         // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
     }
 }
