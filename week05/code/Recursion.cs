@@ -167,36 +167,46 @@ public static class Recursion
     /// </summary>
     public static void SolveMaze(List<string> results, Maze maze, int x = 0, int y = 0, List<ValueTuple<int, int>>? currPath = null)
     {
-        // If this is the first time running the function, then we need
-        // to initialize the currPath list.
+        // If this is the first time running the function, then initialize the currPath list.
         if (currPath == null)
         {
             currPath = new List<ValueTuple<int, int>>();
-        }
-
-        // currPath.Add((1,2)); // Use this syntax to add to the current path
-
-        // TODO Start Problem 5
-        if (currPath == null)
-        {
-            currPath = new List<ValueTuple<int, int>>();
-        }
-
-        // Base case: If reached the end
-        if (x == maze.EndX && y == maze.EndY)
-        {
-            results.Add(string.Join(" -> ", currPath.Select(p => $"({p.Item1},{p.Item2})")));
-            return;
         }
 
         // Add the current position to the path
         currPath.Add((x, y));
 
+        // Base case: If we have reached the end of the maze
+        if (maze.IsEnd(x, y))
+        {
+            results.Add(string.Join(" -> ", currPath.Select(p => $"({p.Item1},{p.Item2})")));
+            return;
+        }
+
         // Recursive case: Try moving in all valid directions (check boundaries and walls)
-        if (maze.IsOpen(x + 1, y)) SolveMaze(results, maze, x + 1, y, new List<ValueTuple<int, int>>(currPath)); // Move right
-        if (maze.IsOpen(x - 1, y)) SolveMaze(results, maze, x - 1, y, new List<ValueTuple<int, int>>(currPath)); // Move left
-        if (maze.IsOpen(x, y + 1)) SolveMaze(results, maze, x, y + 1, new List<ValueTuple<int, int>>(currPath)); // Move down
-        if (maze.IsOpen(x, y - 1)) SolveMaze(results, maze, x, y - 1, new List<ValueTuple<int, int>>(currPath)); // Move up
-        // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+        // Move right (x + 1, y)
+        if (maze.IsValidMove(currPath, x + 1, y))
+        {
+            SolveMaze(results, maze, x + 1, y, new List<ValueTuple<int, int>>(currPath));
+        }
+
+        // Move left (x - 1, y)
+        if (maze.IsValidMove(currPath, x - 1, y))
+        {
+            SolveMaze(results, maze, x - 1, y, new List<ValueTuple<int, int>>(currPath));
+        }
+
+        // Move down (x, y + 1)
+        if (maze.IsValidMove(currPath, x, y + 1))
+        {
+            SolveMaze(results, maze, x, y + 1, new List<ValueTuple<int, int>>(currPath));
+        }
+
+        // Move up (x, y - 1)
+        if (maze.IsValidMove(currPath, x, y - 1))
+        {
+            SolveMaze(results, maze, x, y - 1, new List<ValueTuple<int, int>>(currPath));
+        }
     }
+
 }
